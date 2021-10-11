@@ -26,7 +26,11 @@ globalThis.hostcall_str = (command, payload) => {
 };
 
 export function js_eval(code) {
-    return globalThis.eval(code).toString();
+    // Wrap execution in a closure.
+    // Seems to prevent some issues.
+    return (() => {
+        return globalThis.eval(code).toString();
+    })();
 }
 
 ",
