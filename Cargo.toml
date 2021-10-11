@@ -1,0 +1,9 @@
+[workspace]
+members = [
+  "codegen",
+  "wasmtime_js",
+]
+
+exclude = [
+  "witx-bindgen",
+]

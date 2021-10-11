@@ -1,0 +1,13 @@
+[package]
+name = "codegen"
+version = "0.1.0"
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+anyhow = "1.0.44"
+
+witx-bindgen-gen-core = { git = "https://github.com/bytecodealliance/witx-bindgen" }
+witx-bindgen-gen-spidermonkey = { git = "https://github.com/bytecodealliance/witx-bindgen" }
+witx2 = { git = "https://github.com/bytecodealliance/witx-bindgen" }

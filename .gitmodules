@@ -1,0 +1,3 @@
+[submodule "codegen/witx-bindgen"]
+	path = codegen/witx-bindgen
+	url = https://github.com/bytecodealliance/witx-bindgen

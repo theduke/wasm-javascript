@@ -1,0 +1,4 @@
+
+// FIXME: somehow the generated code erronously passes the javascript code as 
+// the first argument!  Need to investigate witx-bindgen-gen-spidermonkey code.
+hostcall_str: function(code: string, command: string, payload: string) -> string
