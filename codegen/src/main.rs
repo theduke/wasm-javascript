@@ -1,3 +1,7 @@
+//! Binary that generates a js.wasm file based on .witx interface type definitions.
+//!
+//! Uses witx-bindgen
+
 use witx_bindgen_gen_core::Generator;
 
 fn main() {

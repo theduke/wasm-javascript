@@ -204,9 +204,9 @@ name = "codegen"
 version = "0.1.0"
 dependencies = [
  "anyhow",
- "witx-bindgen-gen-core 0.1.0",
+ "witx-bindgen-gen-core",
  "witx-bindgen-gen-spidermonkey",
- "witx2 0.1.0",
+ "witx2",
 ]
 
 [[package]]
@@ -1546,18 +1546,10 @@ dependencies = [
 [[package]]
 name = "witx-bindgen-gen-core"
 version = "0.1.0"
-dependencies = [
- "anyhow",
- "witx2 0.1.0",
-]
-
-[[package]]
-name = "witx-bindgen-gen-core"
-version = "0.1.0"
 source = "git+https://github.com/bytecodealliance/witx-bindgen#0fea5183d121fdf736585ab9d291b3cc08487cd0"
 dependencies = [
  "anyhow",
- "witx2 0.1.0 (git+https://github.com/bytecodealliance/witx-bindgen)",
+ "witx2",
 ]
 
 [[package]]
@@ -1566,16 +1558,17 @@ version = "0.1.0"
 source = "git+https://github.com/bytecodealliance/witx-bindgen#0fea5183d121fdf736585ab9d291b3cc08487cd0"
 dependencies = [
  "heck",
- "witx-bindgen-gen-core 0.1.0 (git+https://github.com/bytecodealliance/witx-bindgen)",
+ "witx-bindgen-gen-core",
 ]
 
 [[package]]
 name = "witx-bindgen-gen-spidermonkey"
 version = "0.1.0"
+source = "git+https://github.com/bytecodealliance/witx-bindgen#0fea5183d121fdf736585ab9d291b3cc08487cd0"
 dependencies = [
  "lazy_static",
  "wasm-encoder",
- "witx-bindgen-gen-core 0.1.0",
+ "witx-bindgen-gen-core",
 ]
 
 [[package]]
@@ -1584,7 +1577,7 @@ version = "0.1.0"
 source = "git+https://github.com/bytecodealliance/witx-bindgen#0fea5183d121fdf736585ab9d291b3cc08487cd0"
 dependencies = [
  "heck",
- "witx-bindgen-gen-core 0.1.0 (git+https://github.com/bytecodealliance/witx-bindgen)",
+ "witx-bindgen-gen-core",
  "witx-bindgen-gen-rust",
 ]
 
@@ -1607,16 +1600,8 @@ source = "git+https://github.com/bytecodealliance/witx-bindgen#0fea5183d121fdf73
 dependencies = [
  "proc-macro2",
  "syn",
- "witx-bindgen-gen-core 0.1.0 (git+https://github.com/bytecodealliance/witx-bindgen)",
+ "witx-bindgen-gen-core",
  "witx-bindgen-gen-wasmtime",
-]
-
-[[package]]
-name = "witx2"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "id-arena",
 ]
 
 [[package]]
