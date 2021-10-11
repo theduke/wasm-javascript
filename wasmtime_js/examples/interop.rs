@@ -42,6 +42,8 @@ fn main() -> Result<(), anyhow::Error> {
 
                 if ('Err' in json) {
                     throw new Error(json.Err);
+                } else if (!('Ok' in json)) {
+                    throw new Error("Malformed response: missing 'Ok' key in " + json);
                 }
                 return json.Ok;
             };
