@@ -122,9 +122,7 @@ mod tests {
             .unwrap();
         eprintln!("context built!");
 
-        eprintln!("{:?}", ctx.eval("Object.getOwnPropertyNames(globalThis)").unwrap());
-
         assert_eq!(ctx.eval("1+2").unwrap(), "3");
-        // assert_eq!(ctx.eval(r#"hostcall_str("a", "b")"#).unwrap(), "hello");
+        assert_eq!(ctx.eval(r#"hostcall_str("a", "b")"#).unwrap(), "hello");
     }
 }
