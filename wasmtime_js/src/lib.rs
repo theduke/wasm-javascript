@@ -4,6 +4,7 @@ witx_bindgen_wasmtime::import!("wasmtime_js/witx/host_api.witx");
 static WASM_SPIDERMONKEY: &'static [u8] = include_bytes!("../wasm/spidermonkey.wasm");
 static WASM_GLUE: &'static [u8] = include_bytes!("../wasm/js.wasm");
 
+#[derive(Clone)]
 pub struct JsHost {
     engine: wasmtime::Engine,
     spidermonkey_module: wasmtime::Module,
