@@ -20,9 +20,7 @@ impl JsHost {
         let engine = wasmtime::Engine::new(&config)?;
 
         // Load WASM modules.
-        eprintln!("Loading spidermonkey WASM");
         let spidermonkey_module = wasmtime::Module::new(&engine, WASM_SPIDERMONKEY)?;
-        eprintln!("Loading glue WASM");
         let glue_module = wasmtime::Module::new(&engine, WASM_GLUE)?;
 
         Ok(Self {
@@ -69,7 +67,6 @@ impl JsHost {
             .get_typed_func::<(), (), _>(&mut store, "wizer.initialize")?
             .call(&mut store, ())?;
 
-
         Ok(JsContext {
             store,
             _instance: instance,
@@ -110,100 +107,6 @@ struct State {
     js_api: js_api::JsApiData,
 }
 
-//fn run() -> Result<(), anyhow::Error> {
-//    use wasmtime::*;
-
-//    let mut config = wasmtime::Config::default();
-//    config.wasm_module_linking(true).wasm_multi_memory(true);
-//    let engine = Engine::new(&config)?;
-
-//    let mut linker = wasmtime::Linker::<State>::new(&engine);
-
-//    // Add wasi
-//    wasmtime_wasi::add_to_linker(&mut linker, |s| &mut s.wasi)?;
-//    let wasi = wasmtime_wasi::sync::WasiCtxBuilder::new()
-//        .inherit_stdio()
-//        .inherit_args()?
-//        .build();
-
-//    let state = State {
-//        wasi,
-//        host_api: HostApi,
-//        js_api: js_api::JsApiData {},
-//    };
-
-//    let mut store = Store::new(&engine, state);
-
-//    // Add spidermonkey.
-//    eprintln!("Loading spidermonkey...");
-//    let code = std::fs::read("./out/spidermonkey.wasm").unwrap();
-//    let spidermonkey_module = Module::new(&engine, code)?;
-//    linker.module(&mut store, "spidermonkey", &spidermonkey_module)?;
-
-//    // Add custom APIs.
-//    host_api::add_host_api_to_linker(&mut linker, |s| &mut s.host_api)?;
-
-//    // Add user code.
-//    eprintln!("Loading user js...");
-//    let code = std::fs::read("./out/js.wasm").unwrap();
-//    let module = Module::new(&engine, code)?;
-//    // linker.module(&mut store, "", &module)?;
-//    //
-//    module.exports().for_each(|e| {
-//        if e.ty().func().is_some() {
-//            dbg!(e);
-//        }
-//    });
-
-//    let (js, instance) =
-//        js_api::JsApi::instantiate(&mut store, &module, &mut linker, |s| &mut s.js_api)?;
-
-//    eprintln!("Initializing Spidermonkey with wizer...");
-//    instance
-//        .get_typed_func::<(), (), _>(&mut store, "wizer.initialize")?
-//        .call(&mut store, ())?;
-
-//    eprintln!("Evaluating javascript...");
-//    let out = js.js_eval(
-//        &mut store,
-//        r#"
-//        (() => {
-//            const x = hostcall_str('a', 'b');
-//            return JSON.stringify({
-//                res: x,
-//            })
-//        })()
-//    "#,
-//    )?;
-//    eprintln!("{}", out);
-
-//    // let js = js_api::JsApi::new()
-
-//    // linker
-//    //     .get_default(&mut store, "")?
-//    //     .typed::<(), (), _>(&store)?
-//    //     .call(&mut store, ())?;
-
-//    // All wasm objects operate within the context of a "store". Each
-//    // `Store` has a type parameter to store host-specific data, which in
-//    // this case we're using `4` for.
-//    // let host_hello = Func::wrap(&mut store, |caller: Caller<'_, u32>, param: i32| {
-//    //     println!("Got {} from WebAssembly", param);
-//    //     println!("my host state is: {}", caller.data());
-//    // });
-
-//    // Instantiation of a module requires specifying its imports and then
-//    // afterwards we can fetch exports by name, as well as asserting the
-//    // type signature of the function with `get_typed_func`.
-//    // let instance = Instance::new(&mut store, &module, &[host_hello.into()])?;
-//    // let hello = instance.get_typed_func::<(), (), _>(&mut store, "hello")?;
-
-//    // // And finally we can call the wasm!
-//    // hello.call(&mut store, ())?;
-
-//    Ok(())
-//}
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -219,7 +122,9 @@ mod tests {
             .unwrap();
         eprintln!("context built!");
 
+        eprintln!("{:?}", ctx.eval("Object.getOwnPropertyNames(globalThis)").unwrap());
+
         assert_eq!(ctx.eval("1+2").unwrap(), "3");
-        assert_eq!(ctx.eval(r#"hostcall_str("a", "b")"#).unwrap(), "hello");
+        // assert_eq!(ctx.eval(r#"hostcall_str("a", "b")"#).unwrap(), "hello");
     }
 }

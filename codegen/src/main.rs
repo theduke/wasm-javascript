@@ -21,13 +21,12 @@ fn gen() -> Result<(), anyhow::Error> {
         "
 import * as host_api from 'host_api';
 
-
-function hostcall_str(command, payload) {
+globalThis.hostcall_str = (command, payload) => {
     return host_api.hostcall_str(command, payload);
-}
+};
 
 export function js_eval(code) {
-    return eval(code).toString();
+    return globalThis.eval(code).toString();
 }
 
 ",
