@@ -16,7 +16,8 @@ impl JsHost {
         config
             .wasm_module_linking(true)
             .wasm_multi_memory(true)
-            .wasm_reference_types(true);
+            .wasm_reference_types(true)
+            .cache_config_load_default()?;
         let engine = wasmtime::Engine::new(&config)?;
 
         // Load WASM modules.

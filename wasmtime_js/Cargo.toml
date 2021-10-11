@@ -7,7 +7,7 @@ edition = "2018"
 
 [dependencies]
 anyhow = { version =  "1.0.44", features = ["backtrace"] }
-wasmtime = "0.30.0"
+wasmtime = { version =  "0.30.0", features = ["cache"] }
 wasmtime-wasi = "0.30.0"
 
 witx-bindgen-wasmtime = { git = "https://github.com/bytecodealliance/witx-bindgen" }
