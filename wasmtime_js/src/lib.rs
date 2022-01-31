@@ -1,8 +1,10 @@
-witx_bindgen_wasmtime::export!("wasmtime_js/witx/js_api.witx");
-witx_bindgen_wasmtime::import!("wasmtime_js/witx/host_api.witx");
+wit_bindgen_wasmtime::import!("wit/js_api.wit");
+wit_bindgen_wasmtime::export!("wit/host_api.wit");
 
-static WASM_SPIDERMONKEY: &'static [u8] = include_bytes!("../wasm/spidermonkey.wasm");
-static WASM_GLUE: &'static [u8] = include_bytes!("../wasm/js.wasm");
+static WASM_SPIDERMONKEY: &'static [u8] = include_bytes!("../wasm/wit_spidermonkey.wasm");
+// static WASM_GLUE: &'static [u8] = include_bytes!(concat!(env!("OUT_DIR"), "/bridge.wasm"));
+static WASM_GLUE: &'static [u8] =
+    include_bytes!(concat!(env!("CARGO_MANIFEST_DIR"), "/wasm/code.wasm"));
 
 #[derive(Clone)]
 pub struct JsHost {
@@ -57,7 +59,7 @@ impl JsHost {
         linker.module(&mut store, "spidermonkey", &self.spidermonkey_module)?;
 
         // Add glue code.
-        host_api::add_host_api_to_linker(&mut linker, |s| &mut s.host_api)?;
+        host_api::add_to_linker(&mut linker, |s| &mut s.host_api)?;
 
         let (js, instance) =
             js_api::JsApi::instantiate(&mut store, &self.glue_module, &mut linker, |s| {
@@ -65,6 +67,7 @@ impl JsHost {
             })?;
 
         // Call initialization code.
+        eprintln!("calling wizer.initialize()");
         instance
             .get_typed_func::<(), (), _>(&mut store, "wizer.initialize")?
             .call(&mut store, ())?;
@@ -85,7 +88,7 @@ pub struct JsContext {
 
 impl JsContext {
     pub fn eval(&mut self, js_code: &str) -> Result<String, wasmtime::Trap> {
-        self.js.js_eval(&mut self.store, js_code)
+        self.js.jseval(&mut self.store, js_code)
     }
 }
 
@@ -98,7 +101,7 @@ struct HostApi {
 impl host_api::HostApi for HostApi {
     // FIXME: somehow the generated code erronously passes the javascript code as
     // the first argument!  Need to investigate witx-bindgen-gen-spidermonkey code.
-    fn hostcall_str(&mut self, _code: &str, command: &str, data: &str) -> String {
+    fn hostcallstr(&mut self, _code: &str, command: &str, data: &str) -> String {
         (&*self.callback)(command, data)
     }
 }
@@ -115,16 +118,11 @@ mod tests {
 
     #[test]
     fn test_simple() {
-        eprintln!("building host...");
         let host = JsHost::new().unwrap();
-        eprintln!("Host built!");
-        eprintln!("buuilding context...");
         let mut ctx = host
             .build_context(|_cmd, _data| "hello".to_string())
             .unwrap();
-        eprintln!("context built!");
-
         assert_eq!(ctx.eval("1+2").unwrap(), "3");
-        assert_eq!(ctx.eval(r#"hostcall_str("a", "b")"#).unwrap(), "hello");
+        assert_eq!(ctx.eval(r#"hostcallstr("a", "b")"#).unwrap(), "hello");
     }
 }

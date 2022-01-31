@@ -7,7 +7,7 @@ fn main() -> Result<(), anyhow::Error> {
 
     // Create a new isolated Javascript context.
     // The supplied function handles guest <-> host interop.
-    // The javascript can call the `hostcall_str()` function with a command and
+    // The javascript can call the `hostcallstr()` function with a command and
     // a payload, both strings.
     // The handler returns a string.
     //
@@ -37,7 +37,8 @@ fn main() -> Result<(), anyhow::Error> {
     ctx.eval(
         r#"
             globalThis.hostname = () => {
-                const rawResult = hostcall_str("hostname", "");
+                const rawResult = hostcallstr("hostname", "");
+
                 const json = JSON.parse(rawResult);
 
                 if ('Err' in json) {

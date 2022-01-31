@@ -1,0 +1,2 @@
+
+jseval: function(code: string) -> string
